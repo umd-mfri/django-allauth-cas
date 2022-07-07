@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.path import include, url
+from django.urls import include, re_path
 from django.utils.module_loading import import_string
 
 
@@ -36,16 +36,16 @@ def default_urlpatterns(provider):
         logout_view = None
 
     urlpatterns = [
-        url('^login/$', login_view,
+        re_path('^login/$', login_view,
             name=provider.id + '_login'),
-        url('^login/callback/$', callback_view,
+        re_path('^login/callback/$', callback_view,
             name=provider.id + '_callback'),
     ]
 
     if logout_view is not None:
         urlpatterns += [
-            url('^logout/$', logout_view,
+            re_path('^logout/$', logout_view,
                 name=provider.id + '_logout'),
         ]
 
-    return [url('^' + provider.get_slug() + '/', include(urlpatterns))]
+    return [re_path('^' + provider.get_slug() + '/', include(urlpatterns))]
